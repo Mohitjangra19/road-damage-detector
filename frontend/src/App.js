@@ -105,14 +105,14 @@ function App() {
         });
     };
 
-    const processImageMock = () => {
-        setModelStatus('Processing...');
-        setConsoleLogs(logs => [...logs, 'Starting AI image inference...']);
-        setTimeout(() => {
-            setModelStatus('Analysis Complete');
-            generateRandomBoundingBoxes();
-        }, 1500);
-    };
+    // const processImageMock = () => {
+    //     setModelStatus('Processing...');
+    //     setConsoleLogs(logs => [...logs, 'Starting AI image inference...']);
+    //     setTimeout(() => {
+    //         setModelStatus('Analysis Complete');
+    //         generateRandomBoundingBoxes();
+    //     }, 1500);
+    // };
 
     const handleMediaUpload = async (event) => {
         const file = event.target.files[0];
