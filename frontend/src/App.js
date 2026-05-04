@@ -113,7 +113,7 @@ function App() {
         }, 1500);
     };
 
-    const handleMediaUpload = (event) => {
+    const handleMediaUpload = async (event) => {
         const file = event.target.files[0];
         if (file) {
             const url = URL.createObjectURL(file);
@@ -129,12 +129,30 @@ function App() {
             setTelemetry(null);
             isAnalyzingRef.current = false;
             
-            if (isVid) {
-                nextTriggerTime.current = 1; // Start first scan almost immediately 
-                setModelStatus('Playing');
-                setConsoleLogs(['Video loaded. Continuous real-time AI scanning active.']);
+            if (!isVid) {
+                const formData = new FormData();
+                formData.append("file", file);
+
+                try {
+                    setModelStatus("Analyzing....");
+                    const response = await fetch("http://127.0.0.1:5000/predict", {
+                        method: "POST",
+                        body: formData,
+                    });
+                    const data = await response.json();
+                    console.log("Backend Response", data);
+
+                    setConfidence(90); // temporary static confidence for images
+                    setBoundingBoxes(data.detections);
+                    setModelStatus("Analysis Complete");
+                } catch (error) {
+                    console.error("Error", error);
+                    setModelStatus("Error");
+                }
             } else {
-                processImageMock();
+                nextTriggerTime.current = 1;
+                setModelStatus('Playing');
+                setConsoleLogs(['Video Loaded, Continous real-time AI scanning activity.']);
             }
         }
     };
@@ -240,37 +258,37 @@ function App() {
                                                     onMouseLeave={() => setHoveredClass(null)}
                                                 >
                                                     <rect
-                                                        x={box.x}
-                                                        y={box.y}
-                                                        width={box.width}
-                                                        height={box.height}
-                                                        fill={`${box.color}15`}
-                                                        stroke={box.color || "#00ffcc"}
+                                                        x={box?.x || 0}
+                                                        y={box?.y || 0}
+                                                        width={box?.width || 0}
+                                                        height={box?.height || 0}
+                                                        fill={`${box?.color || "#00ffcc"}15`}
+                                                        stroke={box?.color || "#00ffcc"}
                                                         strokeWidth={isHovered ? "4" : "2.5"}
                                                         filter="url(#glow)"
                                                         rx="4"
                                                     />
                                                     <rect
-                                                        x={box.x}
-                                                        y={`calc(${box.y} - 28px)`}
+                                                        x={box?.x || 0}
+                                                        y={(box?.y || 0) - 28}
                                                         width="190"
                                                         height="24"
                                                         fill="rgba(0,0,0,0.8)"
                                                         rx="4"
-                                                        stroke={box.color}
+                                                        stroke={box?.color || "#00ffcc"}
                                                         strokeWidth="1"
                                                     />
                                                     <text
-                                                        x={`calc(${box.x} + 8px)`}
-                                                        y={`calc(${box.y} - 11px)`}
-                                                        fill={box.color || "#00ffcc"}
+                                                        x={(box?.x || 0) + 8}
+                                                        y={(box?.y || 0) - 11}
+                                                        fill={box?.color || "#00ffcc"}
                                                         fontSize="12"
                                                         fontFamily="sans-serif"
                                                         fontWeight="800"
                                                         style={{ letterSpacing: '0.5px' }}
                                                         filter="url(#glow)"
                                                     >
-                                                        {box.class.toUpperCase()} • {box.confidence}%
+                                                        {box?.class?.toUpperCase()} • {box?.confidence}%
                                                     </text>
                                                 </g>
                                             )
