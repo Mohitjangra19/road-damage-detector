@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
+const API_URL = "https://road-damage-detector-geeh.onrender.com";
 
 function App() {
     const [modelStatus, setModelStatus] = useState('Idle');
@@ -135,7 +136,7 @@ function App() {
 
                 try {
                     setModelStatus("Analyzing....");
-                    const response = await fetch("http://127.0.0.1:5000/predict", {
+                    const response = await fetch(`${API_URL}/predict`, {
                         method: "POST",
                         body: formData,
                     });
