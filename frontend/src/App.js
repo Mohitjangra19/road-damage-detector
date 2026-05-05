@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 const API_URL = "https://road-damage-detector-geeh.onrender.com";
 
+import logo from './logo.png';
+
 function App() {
     const [modelStatus, setModelStatus] = useState('Idle');
     const [mediaSrc, setMediaSrc] = useState(null);
@@ -192,10 +194,8 @@ function App() {
             {/* Header */}
             <header className="bg-white/5 backdrop-blur-md border-b border-white/10 p-5 flex items-center justify-between sticky top-0 z-10">
                 <div className="flex items-center space-x-3">
-                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-[0_0_20px_rgba(34,211,238,0.4)]">
-                        <svg className="w-5 h-5 text-white animate-[pulse_2s_ease-in-out_infinite]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
-                        </svg>
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-[0_0_20px_rgba(34,211,238,0.4)] overflow-hidden">
+                        <img src={logo} alt="Logo" className="w-8 h-8 object-contain animate-[pulse_2s_ease-in-out_infinite]" />
                     </div>
                     <h1 className="text-2xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-400 uppercase">
                         ROAD DAMAGE <span className="font-light text-gray-400 text-lg">DETECTOR</span>
